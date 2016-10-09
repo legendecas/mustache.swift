@@ -8,7 +8,7 @@ class MustacheTests: XCTestCase {
     XCTAssertEqual(Mustache().text, "Hello, World!")
   }
 
-  static var allTests : [(String, (MustacheTests) -> () throws -> Void)] {
+  static var allTests: [(String, (MustacheTests) -> () throws -> Void)] {
     return [
       ("testExample", testExample),
     ]
