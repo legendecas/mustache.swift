@@ -12,14 +12,13 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-import XCTest
-@testable import Mustache
+public struct Mustache {
+  public static func render(
+    _ template: String,
+    with context: Dictionary<String, Any>
+  ) {
 
-class MustacheTests: XCTestCase {
-  func testExample() {
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
-    XCTAssertEqual(Mustache.text, "Hello, World!")
   }
 
+  public static let text = "Hello, World!"
 }
