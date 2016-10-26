@@ -13,12 +13,17 @@
 //  limitations under the License.
 
 public struct Mustache {
+
   public static func render(
     _ template: String,
-    with context: Dictionary<String, Any>
-  ) {
+    with context: [String: CustomStringConvertible]
+  ) -> String {
+    let writer = Writer()
+    let parser = Parser()
 
+    let tokens = try! parser.parse(template: template)
+
+    return writer.render(tokens, with: Context(context))
   }
 
-  public static let text = "Hello, World!"
 }

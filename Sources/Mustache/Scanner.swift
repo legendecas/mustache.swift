@@ -1,9 +1,3 @@
-//
-//  File.swift
-//  MustacheSwift
-//
-//  Created by Lucas Woo on 10/12/16.
-//
 //  Copyright 2016 Lucas Woo <legendecas@gmail.com>
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -81,15 +75,10 @@ class Scanner {
 
     if let match = regex.firstMatch(in: string, range: searchRange) {
       guard let range = string.range(of: match.range) else { return nil }
-
-      let skippedRange = position..<range.lowerBound
-      position = range.upperBound
-
-      return string[skippedRange]
+      defer { position = range.lowerBound }
+      return string[position..<range.lowerBound]
     } else {
-      defer {
-        position = string.endIndex
-      }
+      defer { position = string.endIndex }
       return string[position..<string.endIndex]
     }
   }
@@ -104,6 +93,11 @@ class Scanner {
   func scan(until re: String) throws -> String? {
     let regex = try NSRegularExpression(pattern: re)
     return scan(until: regex)
+  }
+
+  /// <#Description#>
+  func stepBack() {
+    position = string.index(before: position)
   }
 
 }

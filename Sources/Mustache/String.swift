@@ -37,4 +37,8 @@ extension String {
     return self[range]
   }
 
+  func trimed() -> String {
+    return trimmingCharacters(in: CharacterSet(charactersIn: " "))
+  }
+
 }

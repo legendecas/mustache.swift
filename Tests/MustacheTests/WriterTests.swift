@@ -23,15 +23,15 @@ class WriterTests: XCTestCase {
 
   func testRenderText() {
     let text = "hello world"
-    let tokens: [Token] = [.text(text, text.startIndex..<text.endIndex)]
+    let tokens: [Token] = [.text(text, at: text.startIndex..<text.endIndex)]
     expect(text) == writer.render(tokens, with: Context([:]))
   }
 
   func testRenderVariable() {
     let template = "hello {{world}}"
     let tokens: [Token] = [
-      .text("hello ", template.range(of: "hello ")!),
-      .variable("world", template.range(of: "{{world}}")!),
+      .text("hello ", at: template.range(of: "hello ")!),
+      .variable("world", at: template.range(of: "{{world}}")!),
     ]
     let context = Context(["world": "<b>world!</b>"])
     expect("hello &lt;b&gt;world!&lt;/b&gt;") == writer.render(tokens, with: context)
@@ -40,8 +40,8 @@ class WriterTests: XCTestCase {
   func testRenderUnescapedVariable() {
     let template = "hello {{{world}}}"
     let tokens: [Token] = [
-      .text("hello ", template.range(of: "hello ")!),
-      .unescapedVariable("world", template.range(of: "{{world}}")!),
+      .text("hello ", at: template.range(of: "hello ")!),
+      .unescapedVariable("world", at: template.range(of: "{{world}}")!),
     ]
     let context = Context(["world": "<b>world!</b>"])
     expect("hello <b>world!</b>") == writer.render(tokens, with: context)
@@ -50,14 +50,14 @@ class WriterTests: XCTestCase {
   func testRenderSectionWithTruthyValue() {
     let template1 = "{{#shown?}}Shown!{{/shown}}"
     let tokens1: [Token] = [
-      .section("shown?", template1.startIndex..<template1.endIndex, [
-        .text("Shown!", template1.range(of: "Shown!")!),
+      .section("shown?", at: template1.startIndex..<template1.endIndex, of: [
+        .text("Shown!", at: template1.range(of: "Shown!")!),
       ]),
     ]
     let template2 = "{{#shouldNotShown}}Bad, I'm here{{/shouldNotShown}}"
     let tokens2: [Token] = [
-      .section("shouldNotShown", template2.startIndex..<template2.endIndex, [
-        .text("Bad, I'm here", template2.range(of: "Bad, I'm here")!),
+      .section("shouldNotShown", at: template2.startIndex..<template2.endIndex, of: [
+        .text("Bad, I'm here", at: template2.range(of: "Bad, I'm here")!),
       ]),
     ]
     let context = Context(["shown?": true, "shouldNotShown": false])
@@ -68,10 +68,10 @@ class WriterTests: XCTestCase {
   func testRenderSectionWithList() {
     let template = "{{#repo}}<b>{{name}}</b>\n{{/repo}}"
     let tokens: [Token] = [
-      .section("repo", template.startIndex..<template.endIndex, [
-        .text("<b>", template.range(of: "<b>")!),
-        .variable("name", template.range(of: "{{name}}")!),
-        .text("</b>\n", template.range(of: "</b>\n")!),
+      .section("repo", at: template.startIndex..<template.endIndex, of: [
+        .text("<b>", at: template.range(of: "<b>")!),
+        .variable("name", at: template.range(of: "{{name}}")!),
+        .text("</b>\n", at: template.range(of: "</b>\n")!),
       ])
     ]
     let context = Context(["repo": [
@@ -85,10 +85,10 @@ class WriterTests: XCTestCase {
   func testRenderSectionWithDict() {
     let template = "{{#repo}}<b>{{name}}</b>{{/repo}}"
     let tokens: [Token] = [
-      .section("repo", template.startIndex..<template.endIndex, [
-        .text("<b>", template.range(of: "<b>")!),
-        .variable("name", template.range(of: "{{name}}")!),
-        .text("</b>", template.range(of: "</b>")!),
+      .section("repo", at: template.startIndex..<template.endIndex, of: [
+        .text("<b>", at: template.range(of: "<b>")!),
+        .variable("name", at: template.range(of: "{{name}}")!),
+        .text("</b>", at: template.range(of: "</b>")!),
       ])
     ]
     let context = Context(["repo": ["name": "resque"]])
@@ -98,8 +98,8 @@ class WriterTests: XCTestCase {
   func testRenderInvertedSection() {
     let template = "{{^repo}}No repos :({{/repo}}"
     let tokens: [Token] = [
-      .invertedSection("repo", template.startIndex..<template.endIndex, [
-        .text("No repos :(", template.range(of: "No repos :(")!),
+      .invertedSection("repo", at: template.startIndex..<template.endIndex, of: [
+        .text("No repos :(", at: template.range(of: "No repos :(")!),
       ])
     ]
     let context = Context(["repo": [] as [String]])

@@ -23,10 +23,29 @@ import Foundation
 /// - invertedSection:   inverted section tag type (keypath, position, sub-tags)
 /// - partial:           partial tag type (partial_name, position)
 enum Token {
-  case text(String, Range<String.Index>)
-  case variable(String, Range<String.Index>)
-  case unescapedVariable(String, Range<String.Index>)
-  case section(String, Range<String.Index>, [Token])
-  case invertedSection(String, Range<String.Index>, [Token])
-  case partial(String, Range<String.Index>)
+  case text(String, at: Range<String.Index>)
+  case variable(String, at: Range<String.Index>)
+  case unescapedVariable(String, at: Range<String.Index>)
+  case section(String, at: Range<String.Index>, of: [Token])
+  case invertedSection(String, at: Range<String.Index>, of: [Token])
+  case partial(String, at: Range<String.Index>)
+}
+
+extension Token: CustomStringConvertible {
+  var description: String {
+    switch self {
+    case .text(let content, _):
+      return "<Text tag: \(content)>"
+    case .variable(let keypath, _):
+      return "<Variable tag: \(keypath)>"
+    case .unescapedVariable(let keypath, _):
+      return "<Unescaped variable tag: \(keypath)>"
+    case .section(let section, _, let subTokens):
+      return "<Section tag: \(section), \(subTokens.map { $0.description })>"
+    case .invertedSection(let section, _, let subTokens):
+      return "<Inverted section tag: \(section), \(subTokens.map { $0.description })>"
+    case .partial(let partial, _):
+      return "<Partial tag: \(partial)"
+    }
+  }
 }

@@ -37,7 +37,7 @@ class ScannerTests: XCTestCase {
     let scanner = Scanner(of: "a test string of {{Scanner}}")
     expect(scanner.eos) == false
     expect(try scanner.scan(until: "\\{\\{")) == "a test string of "
-    expect(try scanner.scan(until: "\\ ")) == "Scanner}}"
+    expect(try scanner.scan(until: "\\ ")) == "{{Scanner}}"
     expect(scanner.eos) == true
     expect(try scanner.scan(until: ".*")).to(beNil())
   }
