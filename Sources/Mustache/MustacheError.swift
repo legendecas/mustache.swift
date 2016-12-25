@@ -18,6 +18,9 @@ enum MustacheError: Error {
   case unopenedSection(String, at: Range<String.Index>)
   case unclosedSection(String, at: Range<String.Index>)
   case unclosedTag(String, at: Range<String.Index>)
+
+  case fileNotFound
+  case encodingNotMatch
 }
 
 extension MustacheError: Equatable {
