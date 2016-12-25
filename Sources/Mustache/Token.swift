@@ -49,3 +49,16 @@ extension Token: CustomStringConvertible {
     }
   }
 }
+
+extension Token: Equatable {
+  static func == (lhs: Token, rhs: Token) -> Bool {
+    switch (lhs, rhs) {
+    case (.text(let lhsText, let lhsRange), .text(let rhsText, let rhsRange)):
+      return lhsText == rhsText && lhsRange == rhsRange
+    case (.variable(let lhsVariable, let lhsRange), .variable(let rhsVariable, let rhsRange)):
+      return lhsVariable == rhsVariable && lhsRange == rhsRange
+    default:
+      return false
+    }
+  }
+}
